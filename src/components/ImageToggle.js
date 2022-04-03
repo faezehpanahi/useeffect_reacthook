@@ -2,11 +2,21 @@ import React, { useEffect, useRef, useState } from "react";
 
 const ImageToggle = ({ primery, secondery }) => {
   const [inView, setInView] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const imageRef = useRef(null);
 
   useEffect(() => {
     window.addEventListener("scroll", scrollHandler);
+    setInView(isInView);
+    setIsLoading(false);
+
+    return (
+      () => {
+        window.removeEventListener("scroll", scrollHandler);
+      },
+      [isLoading]
+    );
   });
 
   const isInView = () => {
@@ -26,7 +36,7 @@ const ImageToggle = ({ primery, secondery }) => {
     });
   };
 
-  return (
+  return isLoading ? null : (
     <div>
       <img src={inView ? primery : secondery} alt="image" ref={imageRef} />
     </div>
